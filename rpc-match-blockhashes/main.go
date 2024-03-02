@@ -4,21 +4,20 @@ import (
 	"context"
 	"fmt"
 	"math/big"
-	"os"
 	"reflect"
 
 	"github.com/ledgerwatch/log/v3"
 
+	"github.com/bludya/evm-rpc-utils/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"gopkg.in/yaml.v2"
 )
 
 // compare block hashes and binary search the first block where they mismatch
 // then print the block number and the field differences
 func main() {
-	rpcConfig, err := getConf()
+	rpcConfig, err := utils.GetConf()
 	if err != nil {
 		panic(fmt.Sprintf("RPGCOnfig: %s", err))
 	}
@@ -216,24 +215,4 @@ func getBlocks(clientA, clientB ethclient.Client, blockNum uint64) (*types.Block
 		return nil, nil, fmt.Errorf("clientB.BlockByNumber: %s", err)
 	}
 	return blockA, blockB, nil
-}
-
-type RpcConfig struct {
-	Url1 string `yaml:"url1"`
-	Url2 string `yaml:"url2"`
-}
-
-func getConf() (RpcConfig, error) {
-	yamlFile, err := os.ReadFile("debugToolsConfig.yaml")
-	if err != nil {
-		return RpcConfig{}, err
-	}
-
-	c := RpcConfig{}
-	err = yaml.Unmarshal(yamlFile, &c)
-	if err != nil {
-		return RpcConfig{}, err
-	}
-
-	return c, nil
 }

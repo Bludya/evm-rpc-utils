@@ -1,4 +1,4 @@
-module evm-rpc-utils
+module github.com/bludya/evm-rpc-utils
 
 go 1.20
 
