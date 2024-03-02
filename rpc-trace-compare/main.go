@@ -75,8 +75,8 @@ func main() {
 	// use the txs on A node since we might be limiting them for debugging purposes \
 	// and those are the ones we want to check
 	for _, txHash := range txHashesA {
-		log.Info("----------------------------------------------")
-		log.Info("Comparing tx", "txHash", txHash)
+		log.Warn("----------------------------------------------")
+		log.Warn("Comparing tx", "txHash", txHash)
 
 		traceA, err := getRpcTrace(rpcConfig.Url1, txHash)
 		if err != nil {
@@ -93,8 +93,8 @@ func main() {
 		if !compareTraces(traceA, traceB) {
 			log.Warn("traces don't match", "txHash", txHash)
 		}
-		log.Info("----------------------------------------------")
 	}
+	defer log.Warn("----------------------------------------------")
 }
 
 func getRpcTrace(url string, txHash string) (*HttpResult, error) {
